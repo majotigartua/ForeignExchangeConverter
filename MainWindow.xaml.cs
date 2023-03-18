@@ -1,51 +1,92 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace ForeignExchangeConverter
 {
     public partial class MainWindow : Window
     {
-        private ServicesAnswer servicesAnswer;
+        private ExchangeRatesServiceAnswer exchangeRatesServiceAnswer;
+        private CurrenciesServiceAnswer currenciesServiceAnswer;
+        private Dictionary<string, string> currencies;
         public MainWindow()
         {
             InitializeComponent();
+            GetExchangeRatesServiceAnswer();
+            GetCurrenciesServiceAnswer();
         }
 
-        private async void ConvertButtonClick(object sender, RoutedEventArgs e)
+        private async void GetExchangeRatesServiceAnswer()
         {
-            string amountInText = AmountTextBox.Text;
+            exchangeRatesServiceAnswer = await Service.GetExchangeRates();
+        }
+
+        private async void GetCurrenciesServiceAnswer()
+        {
+            currenciesServiceAnswer = await Service.GetCurrencies();
+            ConfigureCurrencies();
+        }
+
+        private void ConfigureCurrencies()
+        {
+            if (currenciesServiceAnswer != null)
+            {
+                if (currenciesServiceAnswer.Currencies != null)
+                {
+                    currencies = currenciesServiceAnswer.Currencies;
+                    foreach (var currencie in currencies)
+                    {
+                        SourceExchangeRateComboBox.Items.Add(currencie.Value.ToString());
+                        DestinationExchangeRateComboBox.Items.Add(currencie.Value.ToString());
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(currenciesServiceAnswer.Message, "ADVERTENCIA", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show(currenciesServiceAnswer.Message, "ADVERTENCIA", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void SimpleConvertButtonClick(object sender, RoutedEventArgs e)
+        {
+            string amountInText = SimpleAmountTextBox.Text;
             if (!string.IsNullOrEmpty(amountInText))
             {
                 try
                 {
                     double amount = double.Parse(amountInText);
-                    servicesAnswer = await ForeignExchangeServices.GetExchangeRates();
-                    if (!servicesAnswer.Error)
+                    if (!exchangeRatesServiceAnswer.Error)
                     {
-                        if (servicesAnswer.ExchangeRates != null && servicesAnswer.ExchangeRates.Rates != null)
+                        if (exchangeRatesServiceAnswer.ExchangeRate != null && exchangeRatesServiceAnswer.ExchangeRate.Rates != null)
                         {
-                            if (servicesAnswer.ExchangeRates.Rates.TryGetValue("MXN", out double pesosExchangeRate))
+                            if (exchangeRatesServiceAnswer.ExchangeRate.Rates.TryGetValue("MXN", out double mexicanPesosExchangeRate))
                             {
+                                double exchangeRateResult;
                                 if (DollarsToPesosRadioButton.IsChecked == true)
                                 {
-                                    ForeignExchangeResultLabel.Content = string.Format("{0:#,##0.00}", amount / pesosExchangeRate);
+                                    exchangeRateResult = amount * mexicanPesosExchangeRate;
                                 }
                                 else
                                 {
-                                    ForeignExchangeResultLabel.Content = string.Format("{0:#,##0.00}", amount * pesosExchangeRate);
+                                    exchangeRateResult = amount / mexicanPesosExchangeRate;
                                 }
-                                ConfigureDateAndTimeOfUpdate();
-                                ExchangeRateLabel.Content = string.Format("{0:#,##0.0000}", pesosExchangeRate);
+                                SimpleForeignExchangeResultLabel.Content = string.Format("{0:#,##0.00}", exchangeRateResult);
+                                SimpleExchangeRateLabel.Content = string.Format("{0:#,##0.0000}", mexicanPesosExchangeRate);
+                                SimpleDateAndTimeOfUpdateLabel.Content = GetDateAndTimeOfUpdate();
                             }
                         }
                         else
                         {
-                            MessageBox.Show(servicesAnswer.Message, "ADVERTENCIA", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show(exchangeRatesServiceAnswer.Message, "ADVERTENCIA", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
                     else
                     {
-                        MessageBox.Show(servicesAnswer.Message, "ADVERTENCIA", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(exchangeRatesServiceAnswer.Message, "ADVERTENCIA", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
                 catch (FormatException)
@@ -59,12 +100,27 @@ namespace ForeignExchangeConverter
             }
         }
 
-        private void ConfigureDateAndTimeOfUpdate()
+        private string GetDateAndTimeOfUpdate()
         {
-            long dateAndTimeOfUpdate = servicesAnswer.ExchangeRates.Timestamp;
+            long dateAndTimeOfUpdate = exchangeRatesServiceAnswer.ExchangeRate.Timestamp;
             DateTimeOffset.Now.ToUnixTimeSeconds();
-            DateAndTimeOfUpdateLabel.Content = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-                .AddSeconds(dateAndTimeOfUpdate).ToString("dd/MM/yyyy HH:mm:ss");
+            return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(dateAndTimeOfUpdate).ToString("dd/MM/yyyy HH:mm:ss");
+        }
+
+        private void ExchangeButtonClick(object sender, RoutedEventArgs e)
+        {
+            (DestinationExchangeRateComboBox.SelectedItem, SourceExchangeRateComboBox.SelectedItem) = 
+                (SourceExchangeRateComboBox.SelectedItem, DestinationExchangeRateComboBox.SelectedItem);
+        }
+
+        private void ConvertButtonClick(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private double ConvertToDollars(double amount)
+        {
+            double foreignExchangeResult = 0;
+            return foreignExchangeResult;
         }
     }
 }

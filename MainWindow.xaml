@@ -3,29 +3,43 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ForeignExchangeConverter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="650">
+        Title="MainWindow" Height="350" Width="750">
     <Grid>
         <TabControl>
             <TabItem Header="Simple (MXN/USD)">
                 <Grid Background="#FFE5E5E5">
                     <Label Content="Tipo de conversión:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="135" FontWeight="Bold"/>
-                    <RadioButton x:Name="PesosToDollarsRadioButton" Content="Pesos (MXN) a Dolares (USD)" HorizontalAlignment="Left" Margin="185,17,0,0" VerticalAlignment="Top" IsChecked="True"/>
-                    <RadioButton x:Name="DollarsToPesosRadioButton" Content="Dolares (USD) a Pesos (MXN)" HorizontalAlignment="Left" Margin="415,17,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Importe:" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Width="100" FontWeight="Bold"/>
-                    <TextBox x:Name="AmountTextBox" HorizontalAlignment="Left" Margin="100,52,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="520" Height="26" FontSize="14"/>
+                    <RadioButton x:Name="PesosToDollarsRadioButton" Content="Pesos (MXN) a Dolares (USD)" HorizontalAlignment="Left" Margin="160,17,0,0" VerticalAlignment="Top" IsChecked="True"/>
+                    <RadioButton x:Name="DollarsToPesosRadioButton" Content="Dolares (USD) a Pesos (MXN)" HorizontalAlignment="Left" Margin="370,17,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Importe:" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Width="75" FontWeight="Bold"/>
+                    <TextBox x:Name="SimpleAmountTextBox" HorizontalAlignment="Left" Margin="100,52,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="615" Height="26" FontSize="14"/>
                     <Label Content="Resultado de la conversión:" HorizontalAlignment="Left" Margin="10,95,0,0" VerticalAlignment="Top" Width="165" FontWeight="Bold"/>
-                    <Label x:Name="ForeignExchangeResultLabel" Content="" HorizontalAlignment="Left" Margin="205,98,0,0" VerticalAlignment="Top" Width="415" FontWeight="Bold" Foreground="#FF049606"/>
-                    <Label Content="Tasa de cambio:" HorizontalAlignment="Left" Margin="10,145,0,0" VerticalAlignment="Top" Width="108" FontWeight="Bold"/>
-                    <Label x:Name="ExchangeRateLabel" HorizontalAlignment="Left" Margin="140,145,0,0" VerticalAlignment="Top" Width="479" FontWeight="Bold" Foreground="#FF0B3EBB" Height="26"/>
+                    <Label x:Name="SimpleForeignExchangeResultLabel" Content="" HorizontalAlignment="Left" Margin="195,97,0,0" VerticalAlignment="Top" Width="415" FontWeight="Bold" Foreground="#FF049606"/>
+                    <Label Content="Tasa de cambio:" HorizontalAlignment="Left" Margin="10,145,0,0" VerticalAlignment="Top" Width="105" FontWeight="Bold"/>
+                    <Label x:Name="SimpleExchangeRateLabel" HorizontalAlignment="Left" Margin="124,147,0,0" VerticalAlignment="Top" Width="485" FontWeight="Bold" Foreground="#FF0B3EBB" Height="26"/>
                     <Label Content="Fecha y hora de actualización (UTC):" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top" Width="215" FontWeight="Bold"/>
-                    <Label x:Name="DateAndTimeOfUpdateLabel" Content="" HorizontalAlignment="Left" Margin="240,197,0,0" VerticalAlignment="Top" Width="378" FontWeight="Bold" Foreground="#FF0B3EBB"/>
-                    <Button x:Name="ConvertButton" Content="Convertir" HorizontalAlignment="Center" Margin="0,245,0,0" VerticalAlignment="Top" Height="35" Width="445" Background="#FF7DDAF9" Click="ConvertButtonClick"/>
+                    <Label x:Name="SimpleDateAndTimeOfUpdateLabel" Content="" HorizontalAlignment="Left" Margin="240,197,0,0" VerticalAlignment="Top" Width="370" FontWeight="Bold" Foreground="#FF0B3EBB"/>
+                    <Button x:Name="SimpleConvertButton" Content="Convertir" HorizontalAlignment="Center" Margin="0,250,0,0" VerticalAlignment="Top" Height="35" Width="444" Background="#FF7DDAF9" Click="SimpleConvertButtonClick"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Internacional">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <Label Content="Convertir de:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="135" FontWeight="Bold"/>
+                    <ComboBox x:Name="SourceExchangeRateComboBox" HorizontalAlignment="Left" Margin="115,14,0,0" VerticalAlignment="Top" Width="225" SelectedIndex="0"/>
+                    <Label Content="A:" HorizontalAlignment="Left" Margin="355,12,0,0" VerticalAlignment="Top" Width="26" FontWeight="Bold"/>
+                    <ComboBox x:Name="DestinationExchangeRateComboBox" HorizontalAlignment="Left" Margin="395,14,0,0" VerticalAlignment="Top" Width="225" SelectedIndex="0"/>
+                    <Button Content="Intercambiar" HorizontalAlignment="Left" Margin="645,13,0,0" VerticalAlignment="Top" Width="85" Click="ExchangeButtonClick" Height="23"/>
+                    <Label Content="Importe:" HorizontalAlignment="Left" Margin="10,55,0,0" VerticalAlignment="Top" Width="100" FontWeight="Bold"/>
+                    <TextBox x:Name="AmountTextBox" HorizontalAlignment="Left" Margin="115,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="505" Height="26" FontSize="14"/>
+                    <Label Content="Resultado de la conversión:" HorizontalAlignment="Left" Margin="10,105,0,0" VerticalAlignment="Top" Width="165" FontWeight="Bold"/>
+                    <Label x:Name="ForeignExchangeResultLabel" Content="" HorizontalAlignment="Left" Margin="195,107,0,0" VerticalAlignment="Top" Width="415" FontWeight="Bold" Foreground="#FF049606"/>
+                    <Label Content="Tasa de cambio:" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="108" FontWeight="Bold"/>
+                    <Label x:Name="ExchangeRateLabel" HorizontalAlignment="Left" Margin="125,152,0,0" VerticalAlignment="Top" Width="485" FontWeight="Bold" Foreground="#FF0B3EBB" Height="26"/>
+                    <Label Content="Fecha y hora de actualización (UTC):" HorizontalAlignment="Left" Margin="10,200,0,0" VerticalAlignment="Top" Width="215" FontWeight="Bold"/>
+                    <Label x:Name="DateAndTimeOfUpdateLabel" Content="" HorizontalAlignment="Left" Margin="240,202,0,0" VerticalAlignment="Top" Width="380" FontWeight="Bold" Foreground="#FF0B3EBB"/>
+                    <Button x:Name="ConvertButton" Content="Convertir" HorizontalAlignment="Center" Margin="0,250,0,0" VerticalAlignment="Top" Height="35" Width="445" Background="#FF7DDAF9" Click="ConvertButtonClick"/>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

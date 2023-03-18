@@ -1,9 +1,9 @@
 ﻿namespace ForeignExchangeConverter
 {
-    public class ServicesAnswer
+    public class ExchangeRatesServiceAnswer
     {
         public bool Error { get; set; }
         public string Message { get; set; }
-        public ExchangeRates ExchangeRates { get; set; }
+        public ExchangeRate ExchangeRate { get; set; }
     }
 }

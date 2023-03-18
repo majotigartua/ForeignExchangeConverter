@@ -2,7 +2,7 @@
 
 namespace ForeignExchangeConverter
 {
-    public class ExchangeRates
+    public class ExchangeRate
     {
         public string Disclaimer { get; set; }
         public string License { get; set; }
