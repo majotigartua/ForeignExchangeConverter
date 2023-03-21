@@ -2,7 +2,7 @@
 
 namespace ForeignExchangeConverter
 {
-    public class Currencie
+    public class Currency
     {
         public Dictionary<string, string> Currencies { get; set; }
     }

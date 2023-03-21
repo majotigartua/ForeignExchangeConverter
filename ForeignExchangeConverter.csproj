@@ -58,7 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Currencie.cs" />
+    <Compile Include="Currency.cs" />
     <Compile Include="CurrenciesServiceAnswer.cs" />
     <Compile Include="ExchangeRatesServiceAnswer.cs" />
     <Page Include="MainWindow.xaml">

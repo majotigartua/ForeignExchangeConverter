@@ -62,6 +62,7 @@ namespace ForeignExchangeConverter
                 return exchangeRatesServiceAnswer;
             }
         }
+
         public static async Task<CurrenciesServiceAnswer> GetCurrencies()
         {
             CurrenciesServiceAnswer currenciesServiceAnswer = new CurrenciesServiceAnswer();
